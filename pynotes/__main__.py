@@ -1,7 +1,6 @@
 import sys
-from .classmodule import MyClass
-from .funcmodule import my_function
 import win10toast
+
 
 def main():
     print('in main')
