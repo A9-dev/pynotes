@@ -7,6 +7,7 @@ from colorama import init as c_init
 from colorama import Fore, Style
 c_init()
 
+
 def main():
 
     parser = argparse.ArgumentParser(
@@ -41,7 +42,7 @@ def main():
     if args.command == "initdir":
         project_dir = str(pathlib.Path().absolute())
         project_name = project_dir.split("\\")[-1]
-        
+
         addProject(project_name, project_dir)
 
         if not args.quiet:
@@ -78,11 +79,13 @@ def main():
 
 
 def addProject(project_name, project_dir=""):
-	with open("db.json") as json_file:
-		pass
-
-	# ADD JSON TO FILE
-		
+    with open("db.json") as json_file:
+        data = json.load(json_file)
+    data["projects"].append(
+        {"projectName": project_name, "dir": project_dir, "notes": []})
+    with open('db.json', 'w') as json_file:
+        json.dump(data, json_file)
+    # ADD JSON TO FILE
 
 
 if __name__ == '__main__':
