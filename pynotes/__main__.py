@@ -38,6 +38,12 @@ def main():
     view_args.add_argument("-p", "--project", help="",
                            action="store", type=str)
 
+    remove_parser = commands_parser.add_parser(
+    	"remove", help="Lets you remove a project or note.")
+    remove_args = remove_parser.add_mutually_exclusive_group()
+    remove_args.add_argument("-p", "--project", help="", action="store", type=str)
+    remove_args.add_argument("-n", "--note", help="", action="store", type=str)
+
     args = parser.parse_args()
     if args.command == "initdir":
         project_dir = str(pathlib.Path().absolute())
@@ -76,6 +82,10 @@ def main():
         for j in notes:
             print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
             i += 1
+
+    elif args.command == "remove":
+    	pass
+    	#ADD THIS
 
 
 def addProject(project_name, project_dir=""):
