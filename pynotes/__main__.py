@@ -24,7 +24,20 @@ def main():
 	view_args.add_argument("-a", "--all", default=False, action="store_true")
 	view_args.add_argument("-p", "--project", help="", action="store", type=str)
 
-	print(parser.parse_args())
+	args = parser.parse_args()
+
+	if args.command == "initdir":
+		pass
+		# do stuff
+	elif args.command == "add-project":
+		pass
+		#do stuff
+	elif args.command == "add-note":
+		pass
+		#do stuff
+	elif args.command == "view":
+		pass
+		#do stuff
 
 
 if __name__ == '__main__':
