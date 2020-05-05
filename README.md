@@ -21,25 +21,5 @@ view (v) [2 | 3](only displays one from dir if dir is initialised, else displays
 [--project | -p] displays notes from specific project
 
 
-# JSON
 
-{
-
-  “projectName”: {
-  
-    “dir”: “”, 
-    
-    “notes”:[“note1”,”note2”,…,“noteN”]
-
-  },
-  
-  “Init-dir project”: {
-  
-    “dir”:”dir when ran initdir was ran”,
-    
-    “notes”:[“note1”,”note2”,…,“noteN”]
-    
-  }
-  
-}
 
