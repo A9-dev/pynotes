@@ -1,7 +1,6 @@
 import sys
 import win10toast
 import argparse
-import os
 import json
 
 
@@ -38,8 +37,8 @@ def main():
     args = parser.parse_args()
 
     if args.command == "initdir":
-        pass
-        # do stuff
+    	pass
+
     elif args.command == "add-project":
         pass
         # do stuff
@@ -50,6 +49,11 @@ def main():
         with open('db.json') as json_file:
             data = json.load(json_file)
             print(data['global'])
+
+
+def addProject(project_name, project_dir=""):
+	with open("db.json") as json_file:
+		
 
 
 if __name__ == '__main__':
