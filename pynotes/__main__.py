@@ -5,8 +5,8 @@ import os
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
-    commands_parser = parser.add_subparsers(help='commands')
+	parser = argparse.ArgumentParser(description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
+	commands_parser = parser.add_subparsers(help='commands')
 
 	parser.add_argument("-q", "--quiet", help="Run command with no output", action="store_true")
 
@@ -20,9 +20,9 @@ def main():
 	add_note_parser.add_argument("-p", "--project", help="", action="store", type=str)
 
 	view_parser = commands_parser.add_parser("view", help="")
-    view_args = view_parser.add_mutually_exclusive_group()
-    view_args.add_argument("-a", "--all", default=False, action="store_true")
-    view_args.add_argument("-p", "--project", help="", action="store", type=str)
+	view_args = view_parser.add_mutually_exclusive_group()
+	view_args.add_argument("-a", "--all", default=False, action="store_true")
+	view_args.add_argument("-p", "--project", help="", action="store", type=str)
 
 	print(parser.parse_args())
 
