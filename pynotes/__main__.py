@@ -35,7 +35,6 @@ def main():
                            action="store", type=str)
 
     args = parser.parse_args()
-
     if args.command == "initdir":
     	pass
 
@@ -46,9 +45,12 @@ def main():
         pass
         # do stuff
     elif args.command == "view":
-        with open('db.json') as json_file:
+        with open("db.json") as json_file:
             data = json.load(json_file)
-            print(data['global'])
+            notes = data[args.project]["notes"] if (
+                args.project) else data["global"]["notes"]
+
+            print("\n".join(notes))
 
 
 def addProject(project_name, project_dir=""):

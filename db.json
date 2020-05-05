@@ -1,6 +1,10 @@
 {
     "global": {
         "dir": "",
-        "notes": ["test"]
+        "notes": ["test", "another note"]
+    },
+    "project1": {
+        "dir": "",
+        "notes": ["test", "another note"]
     }
 }
