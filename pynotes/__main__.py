@@ -12,10 +12,10 @@ def main():
     init_parser = commands_parser.add_parser("initdir", help="")
 
     add_project_parser = commands_parser.add_parser("add-project", help="")
-    add_project_parser.add_argument("projectName", help="")
+    add_project_parser.add_argument("projectName", help="", action="store", type=str)
 
     add_note_parser = commands_parser.add_parser("add-note", help="")
-    add_note_parser.add_argument("note", help="")
+    add_note_parser.add_argument("note", help="", type=str)
     add_note_parser.add_argument("-p", "--project", help="", action="store", type=str)
 
     view_parser = commands_parser.add_parser("view", help="")
