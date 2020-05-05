@@ -60,22 +60,35 @@ def main():
     elif args.command == "view":
         with open("db.json") as json_file:
             data = json.load(json_file)
-        if(args.project):
-            projectName = args.project
-            print("doing this one")
-            for i in data["projects"]:
-                if i["projectName"] == args.project:
-                    notes = i['notes']
+        if(not args.all):
+            if(args.project):
+                projectName = args.project
+                print("doing this one")
+                for i in data["projects"]:
+                    if i["projectName"] == args.project:
+                        notes = i['notes']
+            else:
+                projectName = "Global"
+                for i in data["projects"]:
+                    if i["projectName"] == "Global":
+                        notes = i["notes"]
+            print('Notes from: %s' % (Fore.GREEN + projectName))
+            i = 1
+            for j in notes:
+                print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
+                i += 1
         else:
-            projectName = "Global"
             for i in data["projects"]:
-                if i["projectName"] == "Global":
-                    notes = i["notes"]
-        print('Notes from: %s' % (Fore.GREEN + projectName))
-        i = 1
-        for j in notes:
-            print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
-            i += 1
+                k = 1
+                print(Style.RESET_ALL + 'Notes from: %s' %
+                      (Fore.GREEN + i["projectName"]))
+                if(not i["notes"]):
+                    print(Fore.RED + "  "+"No notes!")
+
+                for j in i["notes"]:
+                    print(Fore.RED + '  ' + str(k) +
+                          ": " + Style.RESET_ALL + str(j))
+                    k += 1
 
 
 def addProject(project_name, project_dir=""):
