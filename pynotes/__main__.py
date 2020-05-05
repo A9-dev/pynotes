@@ -2,9 +2,10 @@ import sys
 import win10toast
 import argparse
 import json
-import os
 import pathlib
-
+from colorama import init as c_init
+from colorama import Fore, Style
+c_init()
 
 def main():
 
@@ -58,10 +59,22 @@ def main():
     elif args.command == "view":
         with open("db.json") as json_file:
             data = json.load(json_file)
-            notes = data[args.project]["notes"] if (
-                args.project) else data["global"]["notes"]
-
-            print("\n".join(notes))
+        if(args.project):
+            projectName = args.project
+            print("doing this one")
+            for i in data["projects"]:
+                if i["projectName"] == args.project:
+                    notes = i['notes']
+        else:
+            projectName = "Global"
+            for i in data["projects"]:
+                if i["projectName"] == "Global":
+                    notes = i["notes"]
+        print('Notes from: %s' % (Fore.GREEN + projectName))
+        i = 1
+        for j in notes:
+            print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
+            i += 1
 
 
 def addProject(project_name, project_dir=""):

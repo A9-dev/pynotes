@@ -1,10 +1,13 @@
 {
-    "global": {
-        "dir": "",
-        "notes": ["test", "another note"]
-    },
-    "project1": {
-        "dir": "",
-        "notes": ["test", "another note"]
-    }
+    "projects": [{
+            "projectName": "Global",
+            "dir": "",
+            "notes": ["The globe is round.", "Note 1 is a lie."]
+        },
+        {
+            "projectName": "test",
+            "dir": "",
+            "notes": []
+        }
+    ]
 }
