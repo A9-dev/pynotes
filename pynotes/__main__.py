@@ -49,7 +49,9 @@ def main():
     elif args.command == "view":
         with open('db.json') as json_file:
             data = json.load(json_file)
-            print(data['global'])
+            notes = data[args.project]['notes'] if (
+                args.project) else data['global']['notes']
+            print("\n".join(notes))
 
 
 if __name__ == '__main__':
