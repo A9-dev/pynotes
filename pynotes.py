@@ -1,4 +1,4 @@
 import sys
-
-for arg in sys.argv:
-    print(arg)
+import json
+import argparse
+import win10toast
