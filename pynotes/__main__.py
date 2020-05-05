@@ -85,7 +85,6 @@ def addProject(project_name, project_dir=""):
         {"projectName": project_name, "dir": project_dir, "notes": []})
     with open('db.json', 'w') as json_file:
         json.dump(data, json_file)
-    # ADD JSON TO FILE
 
 
 if __name__ == '__main__':
