@@ -6,7 +6,7 @@ import os
 
 def main():
 	parser = argparse.ArgumentParser(description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
-	commands_parser = parser.add_subparsers(help='commands')
+	commands_parser = parser.add_subparsers(help='commands', dest="command")
 
 	parser.add_argument("-q", "--quiet", help="Run command with no output", action="store_true")
 
