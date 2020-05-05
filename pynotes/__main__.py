@@ -2,6 +2,8 @@ import sys
 import win10toast
 import argparse
 import json
+import os
+import pathlib
 
 
 def main():
@@ -36,11 +38,20 @@ def main():
 
     args = parser.parse_args()
     if args.command == "initdir":
-    	pass
+        project_dir = str(pathlib.Path().absolute())
+        project_name = project_dir.split("\\")[-1]
+        
+        addProject(project_name, project_dir)
+
+        if not args.quiet:
+            print("Initialised project {0}".format(project_name))
 
     elif args.command == "add-project":
-        pass
-        # do stuff
+        addProject(args.projectName)
+
+        if not args.quiet:
+            print("Added project {0}".format(args.projectName))
+
     elif args.command == "add-note":
         pass
         # do stuff
@@ -55,6 +66,9 @@ def main():
 
 def addProject(project_name, project_dir=""):
 	with open("db.json") as json_file:
+		pass
+
+	# ADD JSON TO FILE
 		
 
 
