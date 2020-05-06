@@ -118,8 +118,10 @@ def main():
 def addProject(project_name, project_dir=""):
     with open(json_path) as json_file:
         data = json.load(json_file)
+
     data["projects"].append(
         {"projectName": project_name, "dir": project_dir, "notes": []})
+    
     with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
 
@@ -135,5 +137,7 @@ if __name__ == '__main__':
 		4. Check if a project exists when trying to add one and if it does, ask to either change name or overwrite. CLAIMED - MORGAN
 		5. Write remove function.
 		6. Add notifications.
+			- Set reminders either at a specific time or after a certain length of time.
+			- Create/Find an icon.
 		7. Add notes to projects.
     '''
