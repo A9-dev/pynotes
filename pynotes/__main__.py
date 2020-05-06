@@ -9,9 +9,15 @@ c_init()
 
 
 def main():
-    with open("db.json") as json_file:
+    global json_path
+    global isInitialised
+    global dirName
+
+    json_path = "\\".join(str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
+    with open(json_path) as json_file:
         data = json.load(json_file)
-        isInitialised = str(pathlib.Path().absolute()) in [x["dir"] for x in data["projects"]]
+
+    isInitialised = str(pathlib.Path().absolute()) in [x["dir"] for x in data["projects"]]
     dirName = str(pathlib.Path().absolute()).split("\\")[-1] if isInitialised else None
 
     parser = argparse.ArgumentParser(
@@ -72,7 +78,7 @@ def main():
         # do stuff
 
     elif args.command == "view":
-        with open("db.json") as json_file:
+        with open(json_path) as json_file:
             data = json.load(json_file)
         if(not args.all):
             if(args.project):
@@ -110,11 +116,11 @@ def main():
 
 
 def addProject(project_name, project_dir=""):
-    with open("db.json") as json_file:
+    with open(json_path) as json_file:
         data = json.load(json_file)
     data["projects"].append(
         {"projectName": project_name, "dir": project_dir, "notes": []})
-    with open('db.json', 'w') as json_file:
+    with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
 
 
@@ -129,6 +135,5 @@ if __name__ == '__main__':
 		4. Check if a project exists when trying to add one and if it does, ask to either change name or overwrite. CLAIMED - MORGAN
 		5. Write remove function.
 		6. Add notifications.
-		7. Use absolute path to db.json; this will take seconds with pathlib I just cba rn. CLAIMED - Morgan
+		7. Add notes to projects.
     '''
-
