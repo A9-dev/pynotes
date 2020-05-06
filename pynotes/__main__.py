@@ -129,5 +129,6 @@ if __name__ == '__main__':
 		4. Check if a project exists when trying to add one and if it does, ask to either change name or overwrite. CLAIMED - MORGAN
 		5. Write remove function.
 		6. Add notifications.
+		7. Use absolute path to db.json; this will take seconds with pathlib I just cba rn. CLAIMED - Morgan
     '''
 
