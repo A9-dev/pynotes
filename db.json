@@ -1,7 +1,1 @@
-{
-    "projects": [{
-        "projectName": "Global",
-        "dir": "",
-        "notes": []
-    }]
-}
+{"projects": [{"projectName": "Global", "dir": "", "notes": []}, {"projectName": "pynotes", "dir": "C:\\Users\\Morgan\\Desktop\\Dev\\Pynotes\\pynotes", "notes": []}]}

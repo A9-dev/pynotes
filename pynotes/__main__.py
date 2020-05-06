@@ -9,6 +9,10 @@ c_init()
 
 
 def main():
+    with open("db.json") as json_file:
+        data = json.load(json_file)
+        isInitialised = str(pathlib.Path().absolute()) in [x["dir"] for x in data["projects"]]
+    dirName = str(pathlib.Path().absolute()).split("\\")[-1] if isInitialised else None
 
     parser = argparse.ArgumentParser(
         description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
@@ -46,13 +50,16 @@ def main():
 
     args = parser.parse_args()
     if args.command == "initdir":
-        project_dir = str(pathlib.Path().absolute())
-        project_name = project_dir.split("\\")[-1]
+        if not isInitialised:
+            project_dir = str(pathlib.Path().absolute())
+            project_name = project_dir.split("\\")[-1]
 
-        addProject(project_name, project_dir)
+            addProject(project_name, project_dir)
 
-        if not args.quiet:
-            print("Initialised project {0}".format(project_name))
+            if not args.quiet:
+                print("Initialised project {0}".format(project_name))
+        else:
+            print("{0} already initialised.".format(dirName))
 
     elif args.command == "add-project":
         addProject(args.projectName)
@@ -97,7 +104,7 @@ def main():
                     k += 1
 
     elif args.command == "remove":
-    	pass
+        pass
     	#ADD THIS
 
 
