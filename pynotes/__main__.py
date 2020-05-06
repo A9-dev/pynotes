@@ -123,10 +123,10 @@ if __name__ == '__main__':
 
     '''
 	TODO:
-		1. Add the option to link an existing project to a directory.
+		1. Add the option to link an existing project to a directory. CLAIMED - MORGAN
 		2. Add colours to all print messages.
 		3. Fix view for initialised directories.
-		4. Check if a project exists when trying to add one and if it does, ask to either change name or overwrite.
+		4. Check if a project exists when trying to add one and if it does, ask to either change name or overwrite. CLAIMED - MORGAN
 		5. Write remove function.
 		6. Add notifications.
     '''
