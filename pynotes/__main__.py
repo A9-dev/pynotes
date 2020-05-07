@@ -9,10 +9,11 @@ from colorama import Fore, Style
 c_init()
 
 json_path = None
-
+data = None
 
 def main():
     global json_path
+    global data
 
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
@@ -33,7 +34,7 @@ def main():
     init_parser = commands_parser.add_parser(
         "initdir", help="Initialise current directory as a project, letting you automatically filter viewed notes to the ones added to the directory if the command was ran from that directory")
     init_parser.add_argument(
-    	"-p", "--project", help="", action="store_true")
+    	"-p", "--project", help="", action="store", type=str)
 
     add_project_parser = commands_parser.add_parser(
         "add-project", help="Add a project which you can add notes to and view notes from")
@@ -62,6 +63,7 @@ def main():
 
     args = parser.parse_args()
     if args.command == "initdir":
+        print(args.project)
         if not isInitialised:
             project_dir = str(pathlib.Path().absolute())
             project_name = project_dir.split("\\")[-1]
