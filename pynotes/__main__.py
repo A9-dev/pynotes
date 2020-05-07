@@ -281,5 +281,4 @@ if __name__ == '__main__':
 			- Set reminders either at a specific time or after a certain length of time.
 			- Create/Find an icon.
 		2. Change searches with isInitialised.
-		3. initdir with existing project adds currentDir to the dir of that project.
 	'''
