@@ -9,22 +9,20 @@ from colorama import Fore, Style
 c_init()
 
 json_path = None
-data = None
 
 
 def main():
     global json_path
-    global data
+
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
         data = json.load(json_file)
 
-    isInitialised = str(pathlib.Path().absolute()) in [
+    currentDir = str(pathlib.Path().absolute())
+    isInitialised = currentDir in [
         x["dir"] for x in data["projects"]]
-    dirName = str(pathlib.Path().absolute()).split(
-        "\\")[-1] if isInitialised else None
-
+    
     parser = argparse.ArgumentParser(
         description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
     commands_parser = parser.add_subparsers(help='commands', dest="command")
@@ -34,6 +32,8 @@ def main():
 
     init_parser = commands_parser.add_parser(
         "initdir", help="Initialise current directory as a project, letting you automatically filter viewed notes to the ones added to the directory if the command was ran from that directory")
+    init_parser.add_argument(
+    	"-p", "--project", help="", action="store_true")
 
     add_project_parser = commands_parser.add_parser(
         "add-project", help="Add a project which you can add notes to and view notes from")
@@ -73,7 +73,7 @@ def main():
                       "Initialised project {0}".format(project_name))
         else:
             print(
-                Fore.RED + "Cannot init directory, {} is already initialised!".format(dirName))
+                Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
 
     elif args.command == "add-project":
         canAdd = True
@@ -173,9 +173,8 @@ if __name__ == '__main__':
 
     '''
 	TODO:
-		1. Add the option to link an existing project to a directory. CLAIMED - MORGAN
-		2. Write remove function.
-		3. Add notifications.
+		1. Write remove function.
+		2. Add notifications.
 			- Set reminders either at a specific time or after a certain length of time.
 			- Create/Find an icon.
     '''
