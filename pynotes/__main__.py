@@ -23,7 +23,7 @@ def main():
     currentDir = str(pathlib.Path().absolute())
     isInitialised = currentDir in [
         x["dir"] for x in data["projects"]]
-    
+
     parser = argparse.ArgumentParser(
         description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
     commands_parser = parser.add_subparsers(help='commands', dest="command")
@@ -94,7 +94,7 @@ def main():
     elif args.command == "add-note":
         if not args.project:
             for i in data['projects']:
-                if (os.getcwd() == i['dir']):
+                if (currentDir == i['dir']):
                     i['notes'].append(args.note)
                     with open(json_path, 'w') as json_file:
                         json.dump(data, json_file)
@@ -125,7 +125,7 @@ def main():
                     print(Fore.RED + "Project %s not found!" % args.project)
             else:
                 for i in data['projects']:
-                    if (os.getcwd() == i['dir']):
+                    if (currentDir == i['dir']):
                         useCurrentDir = True
                         projectName = i['projectName']
                         notes = i['notes']
