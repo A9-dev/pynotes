@@ -80,7 +80,7 @@ def main():
 					project_name = args.project
 				else:
 					print(
-						Fore.RED + "Cannot init, {} is already a project!".format(args.project))
+						Fore.RED + "Cannot init, {} is already initialised!".format(args.project))
 					canInit = False
 
 			if canInit:
