@@ -187,7 +187,22 @@ def main():
 		removed = False
 		if args.note:
 			if args.project:
-				pass
+				found = False
+				for i in data['projects']:
+					if i['projectName'] == args.project:
+						found = True
+						try:
+							i['notes'].pop(args.note-1)
+						except Exception as e:
+							print(Fore.RED + "Invalid note number!")
+						try:
+							with open(json_path, 'w') as json_file:
+								json.dump(data, json_file)
+						except Exception as e:
+							print(Fore.RED + repr(e))
+				if not found and not args.quiet:
+					print(Fore.RED + "Project %s not found!"%(args.project))
+
 				# REMOVE args.note FROM args.project
 			elif isInitialised:
 				pass
@@ -226,4 +241,5 @@ if __name__ == '__main__':
 		1. Add notifications.
 			- Set reminders either at a specific time or after a certain length of time.
 			- Create/Find an icon.
+		2. Change searches with isInitialised.
 	'''
