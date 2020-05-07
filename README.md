@@ -1,3 +1,4 @@
+# This readme needs updating, give us a mo
 # How it works
 
 pynotes [-q] action [options] 
