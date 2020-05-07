@@ -20,7 +20,6 @@ def main():
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
         data = json.load(json_file)
-
     currentDir = str(pathlib.Path().absolute())
     isInitialised = currentDir in [
         x["dir"] for x in data["projects"]]
@@ -72,7 +71,7 @@ def main():
 
             if not args.quiet:
                 print(Fore.GREEN +
-                      "Initialised project {0}".format(project_name))
+                      "Initialised project {0}!".format(project_name))
         else:
             print(
                 Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
@@ -95,17 +94,29 @@ def main():
         if not args.project:
             for i in data['projects']:
                 if (currentDir == i['dir']):
-                    i['notes'].append(args.note)
-                    with open(json_path, 'w') as json_file:
-                        json.dump(data, json_file)
+                    try:
+                        i['notes'].append(args.note)
+                        with open(json_path, 'w') as json_file:
+                            json.dump(data, json_file)
+                        if not args.quiet:
+                            print(Fore.GREEN + "Successfully added note to %s!" %
+                                  (i['projectName']))
+                    except Exception as e:
+                        print(Fore.RED + repr(e))
         else:
             found = False
             for i in data['projects']:
                 if(i['projectName'] == args.project):
-                    found = True
-                    i['notes'].append(args.note)
-                    with open(json_path, 'w') as json_file:
-                        json.dump(data, json_file)
+                    try:
+                        found = True
+                        i['notes'].append(args.note)
+                        with open(json_path, 'w') as json_file:
+                            json.dump(data, json_file)
+                        if not args.quiet:
+                            print(Fore.GREEN + "Successfully added note!")
+                    except Exception as e:
+                        print(Fore.RED + repr(e))
+
             if not found:
                 print(Fore.RED + "Project %s not found!" % args.project)
 
