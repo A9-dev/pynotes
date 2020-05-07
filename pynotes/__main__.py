@@ -9,10 +9,12 @@ from colorama import Fore, Style
 c_init()
 
 json_path = None
+data = None
 
 
 def main():
     global json_path
+    global data
 
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
@@ -22,7 +24,7 @@ def main():
     currentDir = str(pathlib.Path().absolute())
     isInitialised = currentDir in [
         x["dir"] for x in data["projects"]]
-    
+
     parser = argparse.ArgumentParser(
         description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
     commands_parser = parser.add_subparsers(help='commands', dest="command")
@@ -33,7 +35,7 @@ def main():
     init_parser = commands_parser.add_parser(
         "initdir", help="Initialise current directory as a project, letting you automatically filter viewed notes to the ones added to the directory if the command was ran from that directory")
     init_parser.add_argument(
-    	"-p", "--project", help="", action="store_true")
+        "-p", "--project", help="", action="store_true")
 
     add_project_parser = commands_parser.add_parser(
         "add-project", help="Add a project which you can add notes to and view notes from")
@@ -92,7 +94,7 @@ def main():
     elif args.command == "add-note":
         if not args.project:
             for i in data['projects']:
-                if (os.getcwd() == i['dir']):
+                if (currentDir == i['dir']):
                     i['notes'].append(args.note)
                     with open(json_path, 'w') as json_file:
                         json.dump(data, json_file)
@@ -123,7 +125,7 @@ def main():
                     print(Fore.RED + "Project %s not found!" % args.project)
             else:
                 for i in data['projects']:
-                    if (os.getcwd() == i['dir']):
+                    if (currentDir == i['dir']):
                         useCurrentDir = True
                         projectName = i['projectName']
                         notes = i['notes']
