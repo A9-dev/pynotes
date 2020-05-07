@@ -13,12 +13,15 @@ def main():
     global isInitialised
     global dirName
 
-    json_path = "\\".join(str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
+    json_path = "\\".join(
+        str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
         data = json.load(json_file)
 
-    isInitialised = str(pathlib.Path().absolute()) in [x["dir"] for x in data["projects"]]
-    dirName = str(pathlib.Path().absolute()).split("\\")[-1] if isInitialised else None
+    isInitialised = str(pathlib.Path().absolute()) in [
+        x["dir"] for x in data["projects"]]
+    dirName = str(pathlib.Path().absolute()).split(
+        "\\")[-1] if isInitialised else None
 
     parser = argparse.ArgumentParser(
         description="Pynotes is a terminal based app that lets you add notes to specific projects and directories")
@@ -49,9 +52,10 @@ def main():
                            action="store", type=str)
 
     remove_parser = commands_parser.add_parser(
-    	"remove", help="Lets you remove a project or note.")
+        "remove", help="Lets you remove a project or note.")
     remove_args = remove_parser.add_mutually_exclusive_group()
-    remove_args.add_argument("-p", "--project", help="", action="store", type=str)
+    remove_args.add_argument("-p", "--project", help="",
+                             action="store", type=str)
     remove_args.add_argument("-n", "--note", help="", action="store", type=str)
 
     args = parser.parse_args()
@@ -63,15 +67,27 @@ def main():
             addProject(project_name, project_dir)
 
             if not args.quiet:
-                print("Initialised project {0}".format(project_name))
+                print(Fore.GREEN +
+                      "Initialised project {0}".format(project_name))
         else:
-            print("{0} already initialised.".format(dirName))
+            print(
+                Fore.RED + "Cannot init directory, {} is already initialised!".format(dirName))
 
     elif args.command == "add-project":
-        addProject(args.projectName)
+        with open(json_path) as json_file:
+            data = json.load(json_file)
+        canAdd = True
+        for i in data['projects']:
+            if(i['projectName'] == args.projectName):
+                canAdd = False
+        if canAdd:
+            addProject(args.projectName)
 
-        if not args.quiet:
-            print("Added project {0}".format(args.projectName))
+        if not args.quiet and canAdd:
+            print(Fore.GREEN + "Added project {0}".format(args.projectName))
+        else:
+            print(
+                Fore.RED + "Cannot create project, project with the name %s already exists!" % (args.projectName))
 
     elif args.command == "add-note":
         pass
@@ -92,7 +108,7 @@ def main():
                 for i in data["projects"]:
                     if i["projectName"] == "Global":
                         notes = i["notes"]
-            print('Notes from: %s' % (Fore.GREEN + projectName))
+            print('Notes from: ' + Fore.GREEN + projectName)
             i = 1
             for j in notes:
                 print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
@@ -112,7 +128,7 @@ def main():
 
     elif args.command == "remove":
         pass
-    	#ADD THIS
+        # ADD THIS
 
 
 def addProject(project_name, project_dir=""):
@@ -121,7 +137,7 @@ def addProject(project_name, project_dir=""):
 
     data["projects"].append(
         {"projectName": project_name, "dir": project_dir, "notes": []})
-    
+
     with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
 
