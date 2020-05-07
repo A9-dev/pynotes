@@ -55,10 +55,9 @@ def main():
 
 	remove_parser = commands_parser.add_parser(
 		"remove", help="Lets you remove a project or note.")
-	remove_args = remove_parser.add_mutually_exclusive_group()
-	remove_args.add_argument("-p", "--project", help="",
+	remove_parser.add_argument("-p", "--project", help="",
 							 action="store", type=str)
-	remove_args.add_argument("-n", "--note", help="", action="store", type=str)
+	remove_parser.add_argument("-n", "--note", help="", action="store", type=int)
 
 	args = parser.parse_args()
 	if args.command == "initdir":
@@ -185,8 +184,26 @@ def main():
 					k += 1
 
 	elif args.command == "remove":
-		pass
-		# ADD THIS
+		if args.note != None:
+			if args.project != None:
+				pass
+				# REMOVE args.note FROM args.project
+			elif isInitialised:
+				pass
+				# REMOVE args.note FROM project["dir"] == currentDir
+			else:
+				pass
+				# REMOVE args.note FROM Global
+		else:
+			if args.project != None:
+				pass
+				# REMOVE args.project
+			elif isInitialised:
+				pass
+				# REMOVE project["dir"] == currentDir
+			else:
+				pass
+				# ERROR
 
 
 def addProject(project_name, project_dir=""):
