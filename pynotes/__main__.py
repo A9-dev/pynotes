@@ -7,12 +7,12 @@ from colorama import init as c_init
 from colorama import Fore, Style
 c_init()
 
+json_path = None
+isInitialised = None
+dirName = None
+
 
 def main():
-    global json_path
-    global isInitialised
-    global dirName
-
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
@@ -74,8 +74,12 @@ def main():
                 Fore.RED + "Cannot init directory, {} is already initialised!".format(dirName))
 
     elif args.command == "add-project":
-        with open(json_path) as json_file:
-            data = json.load(json_file)
+        try:
+            with open(json_path) as json_file:
+                data = json.load(json_file)
+        except Exception as e:
+            print(Fore.RED + "The following error occurred: " + str(e))
+
         canAdd = True
         for i in data['projects']:
             if(i['projectName'] == args.projectName):
