@@ -62,33 +62,47 @@ def main():
 	args = parser.parse_args()
 	if args.command == "initdir":
 		if not isInitialised:
-			if not isInitialised:
-				project_dir = currentDir
-				project_name = project_dir.split("\\")[-1]
-				canInit = True
+			project_dir = currentDir
+			project_name = project_dir.split("\\")[-1]
+			canInit = True
 
-				if args.project:
-					for i in data['projects']:
-						if(i['projectName'] == args.project):
+			if args.project:
+				isExisting = False
+				for i in range(len(data['projects'])):
+					if data['projects'][i]['projectName'] == args.project:
+						if data['projects'][i]["dir"]:
 							canInit = False
-
-					if canInit:
-						project_name = args.project
-					else:
-						print(
-							Fore.RED + "Cannot init, {} is already a project!".format(args.project))
-						canInit = False
+						else:
+							isExisting = True
+							index = i
 
 				if canInit:
+					project_name = args.project
+				else:
+					print(
+						Fore.RED + "Cannot init, {} is already a project!".format(args.project))
+					canInit = False
+
+			if canInit:
+				if isExisting:
+					data["projects"][index]["dir"] = currentDir
+
+					try:
+						with open(json_path, 'w') as json_file:
+							json.dump(data, json_file)
+					except Exception as e:
+						print(Fore.RED + repr(e))
+
+				else:
 					addProject(project_name, project_dir)
 
-					if not args.quiet:
-						print(Fore.GREEN +
-						  "Initialised project {0}!".format(project_name))
-					
-			else:
-				print(
-					Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
+				if not args.quiet:
+					print(Fore.GREEN +
+					  "Initialised project {0}!".format(project_name))
+				
+		else:
+			print(
+				Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
 
 
 	elif args.command == "add-project":
@@ -211,7 +225,6 @@ def main():
 		else:
 			if args.project:
 				found = False
-				index = 0
 
 				for i in range(len(data["projects"])):
 					if data["projects"][i]["projectName"] == args.project:
