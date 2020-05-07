@@ -3,15 +3,18 @@ import win10toast
 import argparse
 import json
 import pathlib
+import os
 from colorama import init as c_init
 from colorama import Fore, Style
 c_init()
 
 json_path = None
+data = None
 
 
 def main():
     global json_path
+    global data
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
@@ -73,12 +76,6 @@ def main():
                 Fore.RED + "Cannot init directory, {} is already initialised!".format(dirName))
 
     elif args.command == "add-project":
-        try:
-            with open(json_path) as json_file:
-                data = json.load(json_file)
-        except Exception as e:
-            print(Fore.RED + "The following error occurred: " + str(e))
-
         canAdd = True
         for i in data['projects']:
             if(i['projectName'] == args.projectName):
@@ -93,29 +90,59 @@ def main():
                 Fore.RED + "Cannot create project, project with the name %s already exists!" % (args.projectName))
 
     elif args.command == "add-note":
-        pass
-        # do stuff
+        if not args.project:
+            for i in data['projects']:
+                if (os.getcwd() == i['dir']):
+                    i['notes'].append(args.note)
+                    with open(json_path, 'w') as json_file:
+                        json.dump(data, json_file)
+        else:
+            found = False
+            for i in data['projects']:
+                if(i['projectName'] == args.project):
+                    found = True
+                    i['notes'].append(args.note)
+                    with open(json_path, 'w') as json_file:
+                        json.dump(data, json_file)
+            if not found:
+                print(Fore.RED + "Project %s not found!" % args.project)
 
     elif args.command == "view":
-        with open(json_path) as json_file:
-            data = json.load(json_file)
+        notes = []
+        useCurrentDir = False
+        found = True
         if(not args.all):
             if(args.project):
+                found = False
                 projectName = args.project
-                print("doing this one")
                 for i in data["projects"]:
                     if i["projectName"] == args.project:
                         notes = i['notes']
+                        found = True
+                if not found:
+                    print(Fore.RED + "Project %s not found!" % args.project)
             else:
-                projectName = "Global"
-                for i in data["projects"]:
-                    if i["projectName"] == "Global":
-                        notes = i["notes"]
-            print('Notes from: ' + Fore.GREEN + projectName)
-            i = 1
-            for j in notes:
-                print(Fore.RED + '  ' + str(i) + ": " + Style.RESET_ALL + j)
-                i += 1
+                for i in data['projects']:
+                    if (os.getcwd() == i['dir']):
+                        useCurrentDir = True
+                        projectName = i['projectName']
+                        notes = i['notes']
+                if not useCurrentDir:
+                    projectName = "Global"
+                    for i in data["projects"]:
+                        if i["projectName"] == "Global":
+                            notes = i["notes"]
+            if found:
+
+                print(Style.RESET_ALL + 'Notes from: ' +
+                      Fore.GREEN + projectName)
+                if not notes:
+                    print(Fore.RED + "  " + "No notes!")
+                i = 1
+                for j in notes:
+                    print(Fore.RED + '  ' + str(i) +
+                          ": " + Style.RESET_ALL + j)
+                    i += 1
         else:
             for i in data["projects"]:
                 k = 1
@@ -135,12 +162,8 @@ def main():
 
 
 def addProject(project_name, project_dir=""):
-    with open(json_path) as json_file:
-        data = json.load(json_file)
-
     data["projects"].append(
         {"projectName": project_name, "dir": project_dir, "notes": []})
-
     with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
 
