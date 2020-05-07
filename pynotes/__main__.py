@@ -8,11 +8,10 @@ from colorama import Fore, Style
 c_init()
 
 json_path = None
-isInitialised = None
-dirName = None
 
 
 def main():
+    global json_path
     json_path = "\\".join(
         str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
     with open(json_path) as json_file:
