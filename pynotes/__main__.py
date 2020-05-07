@@ -19,7 +19,6 @@ def main():
 		str(pathlib.Path(__file__).absolute()).split("\\")[:-2]) + "\\db.json"
 	with open(json_path) as json_file:
 		data = json.load(json_file)
-
 	currentDir = str(pathlib.Path().absolute())
 	isInitialised = currentDir in [
 		x["dir"] for x in data["projects"]]
@@ -64,31 +63,33 @@ def main():
 	args = parser.parse_args()
 	if args.command == "initdir":
 		if not isInitialised:
-			project_dir = str(pathlib.Path().absolute())
-			project_name = project_dir.split("\\")[-1]
-			canInit = True
+			if not isInitialised:
+				project_dir = str(pathlib.Path().absolute())
+				project_name = project_dir.split("\\")[-1]
+				canInit = True
 
-			if args.project != None:
-				for i in data['projects']:
-					if(i['projectName'] == args.project):
+				if args.project != None:
+					for i in data['projects']:
+						if(i['projectName'] == args.project):
+							canInit = False
+
+					if canInit:
+						project_name = args.project
+					else:
+						print(
+							Fore.RED + "Cannot init, {} is already a project!".format(args.project))
 						canInit = False
 
 				if canInit:
-					project_name = args.project
-				else:
-					print(
-						Fore.RED + "Cannot init, {} is already a project".format(args.project))
-					canInit = False
+					addProject(project_name, project_dir)
 
-			if canInit:
-				addProject(project_name, project_dir)
+				if canInit and not args.quiet:
+					print(Fore.GREEN +
+						  "Initialised project {0}".format(project_name))
+			else:
+				print(
+					Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
 
-			if canInit and not args.quiet:
-				print(Fore.GREEN +
-					  "Initialised project {0}".format(project_name))
-		else:
-			print(
-				Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
 
 	elif args.command == "add-project":
 		canAdd = True
@@ -108,17 +109,29 @@ def main():
 		if not args.project:
 			for i in data['projects']:
 				if (currentDir == i['dir']):
-					i['notes'].append(args.note)
-					with open(json_path, 'w') as json_file:
-						json.dump(data, json_file)
+					try:
+						i['notes'].append(args.note)
+						with open(json_path, 'w') as json_file:
+							json.dump(data, json_file)
+						if not args.quiet:
+							print(Fore.GREEN + "Successfully added note to %s!" %
+								  (i['projectName']))
+					except Exception as e:
+						print(Fore.RED + repr(e))
 		else:
 			found = False
 			for i in data['projects']:
 				if(i['projectName'] == args.project):
-					found = True
-					i['notes'].append(args.note)
-					with open(json_path, 'w') as json_file:
-						json.dump(data, json_file)
+					try:
+						found = True
+						i['notes'].append(args.note)
+						with open(json_path, 'w') as json_file:
+							json.dump(data, json_file)
+						if not args.quiet:
+							print(Fore.GREEN + "Successfully added note!")
+					except Exception as e:
+						print(Fore.RED + repr(e))
+
 			if not found:
 				print(Fore.RED + "Project %s not found!" % args.project)
 
