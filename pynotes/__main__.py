@@ -67,7 +67,7 @@ def main():
 				project_name = project_dir.split("\\")[-1]
 				canInit = True
 
-				if args.project != None:
+				if args.project:
 					for i in data['projects']:
 						if(i['projectName'] == args.project):
 							canInit = False
@@ -184,8 +184,9 @@ def main():
 					k += 1
 
 	elif args.command == "remove":
-		if args.note != None:
-			if args.project != None:
+		removed = False
+		if args.note:
+			if args.project:
 				pass
 				# REMOVE args.note FROM args.project
 			elif isInitialised:
@@ -195,7 +196,7 @@ def main():
 				pass
 				# REMOVE args.note FROM Global
 		else:
-			if args.project != None:
+			if args.project:
 				pass
 				# REMOVE args.project
 			elif isInitialised:
@@ -204,6 +205,10 @@ def main():
 			else:
 				pass
 				# ERROR
+
+		if removed:
+			with open(json_path, 'w') as json_file:
+				json.dump(data, json_file)
 
 
 def addProject(project_name, project_dir=""):
@@ -218,8 +223,7 @@ if __name__ == '__main__':
 
 	'''
 	TODO:
-		1. Write remove function.
-		2. Add notifications.
+		1. Add notifications.
 			- Set reminders either at a specific time or after a certain length of time.
 			- Create/Find an icon.
 	'''
