@@ -63,7 +63,7 @@ def main():
 	if args.command == "initdir":
 		if not isInitialised:
 			if not isInitialised:
-				project_dir = str(pathlib.Path().absolute())
+				project_dir = currentDir
 				project_name = project_dir.split("\\")[-1]
 				canInit = True
 
@@ -82,9 +82,10 @@ def main():
 				if canInit:
 					addProject(project_name, project_dir)
 
-				if canInit and not args.quiet:
-					print(Fore.GREEN +
-						  "Initialised project {0}".format(project_name))
+					if not args.quiet:
+						print(Fore.GREEN +
+						  "Initialised project {0}!".format(project_name))
+					
 			else:
 				print(
 					Fore.RED + "Cannot init directory, {} is already initialised!".format(currentDir))
@@ -193,13 +194,10 @@ def main():
 						found = True
 						try:
 							i['notes'].pop(args.note-1)
+							removed = True
 						except Exception as e:
 							print(Fore.RED + "Invalid note number!")
-						try:
-							with open(json_path, 'w') as json_file:
-								json.dump(data, json_file)
-						except Exception as e:
-							print(Fore.RED + repr(e))
+						
 				if not found and not args.quiet:
 					print(Fore.RED + "Project %s not found!"%(args.project))
 				# Nice
@@ -212,18 +210,46 @@ def main():
 				# REMOVE args.note FROM Global
 		else:
 			if args.project:
-				pass
-				# REMOVE args.project
+				found = False
+				index = 0
+
+				for i in range(len(data["projects"])):
+					if data["projects"][i]["projectName"] == args.project:
+						found = True
+						index = i
+
+				if found:
+					data["projects"].pop(index)
+					removed = True
+
+					if not args.quiet:
+						print(Fore.GREEN + "Removed project, %s!"%(args.project))
+				else:
+					if not args.quiet:
+						print(Fore.RED + "Project, %s not found!"%(args.project))
+
 			elif isInitialised:
-				pass
-				# REMOVE project["dir"] == currentDir
+				index = 0
+
+				for i in range(len(data["projects"])):
+					if data["projects"][i]["dir"] == currentDir:
+						index = i
+
+				data["projects"].pop(index)
+				removed = True
+
+				if not args.quiet:
+					print(Fore.GREEN + "Removed project with dir, %s!"%(currentDir))
+
 			else:
-				pass
-				# ERROR
+				print(Fore.RED + "Please specify a project or note to remove!")
 
 		if removed:
-			with open(json_path, 'w') as json_file:
-				json.dump(data, json_file)
+			try:
+				with open(json_path, 'w') as json_file:
+					json.dump(data, json_file)
+			except Exception as e:
+				print(Fore.RED + repr(e))
 
 
 def addProject(project_name, project_dir=""):
@@ -242,4 +268,5 @@ if __name__ == '__main__':
 			- Set reminders either at a specific time or after a certain length of time.
 			- Create/Find an icon.
 		2. Change searches with isInitialised.
+		3. initdir with existing project adds currentDir to the dir of that project.
 	'''
