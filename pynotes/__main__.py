@@ -202,7 +202,7 @@ def main():
 							print(Fore.RED + repr(e))
 				if not found and not args.quiet:
 					print(Fore.RED + "Project %s not found!"%(args.project))
-
+				# Nice
 				# REMOVE args.note FROM args.project
 			elif isInitialised:
 				pass
